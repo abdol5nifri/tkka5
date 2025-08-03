@@ -229,14 +229,11 @@
                 // حساب عدد الكلمات وتكرارها
                 const cleanedText = text
                     .toLowerCase()
-                    .replace(/[\u064B-\u0652\u0670\u06D6-\u06ED]/g, '') // إزالة علامات التشكيل العربية
-                    // هذا هو السطر المعدل اللي كيحل المشكل ديال الكلمات صفر وديال الحفاظ على الرموز
-                    .replace(/[^\p{L}\p{N}\s.,!?;:"'()&%$#@*~|{}()!&_`:<>^؟éçà~^][+-=\/]/gu, ' ') 
-                    .replace(/\s+/g, ' ') 
-                    .trim(); 
-          
+                    .replace(/[\u064B-\u0652\u0670-\u06ED]/g, ''); // إزالة علامات التشكيل العربية
                 
-                const words = cleanedText.split(' ').filter(word => word.length > 0);
+                // التعبير النمطي الجديد: غنطابقو أي مجموعة من الحروف/الأرقام/الرموز اللي بغينا نحتافضو بيها
+                // OR (بواسطة |) أي رمز خاص بوحدو
+                const words = cleanedText.match(/[\p{L}\p{N}]+|[.,!?;:"'()&%$#@*|\-_+=\\\/\]\[{}~`<>^؟éçà]/gu) || [];
                 
                 const wordCount = words.length;
                 wordCountSpan.textContent = wordCount;
@@ -286,8 +283,10 @@
 
                 sortedWordsForDownload.forEach(word => {
                     const count = currentFrequencyMap[word];
-                    // إذا كانت الكلمة فيها فاصلة (comma), نغلفها بـ double quotes باش Excel يقراها صحيحة
-                    const escapedWord = word.includes(',') ? `"${word.replace(/"/g, '""')}"` : word;
+                    // نغلف الكلمة بعلامتي تنصيص إذا كانت تحتوي على فاصلة، علامة تنصيص، أو أي رمز خاص بـ CSV، أو مسافة
+                    // هاد التعديل باش الرموز تطلع كاملة في Excel
+                    const needsQuotes = /[",\s@#$%^&*()_+\|{}\[\]:;/?><~!=-`\\]/.test(word);
+                    const escapedWord = needsQuotes ? `"${word.replace(/"/g, '""')}"` : word;
                     csvContent += `${escapedWord},${count}\n`;
                 });
 
@@ -319,5 +318,4 @@
         });
     </script>
 </body>
-
 </html>
