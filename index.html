@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حساب الكلمات والحروف والتكرار</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            color: #333;
+            direction: rtl; /* باش النص العربي يكون من اليمين لليسار */
+            padding: 20px; /* باش مايلصقش فجناب الشاشة فالتيليفونات */
+            box-sizing: border-box; /* باش البادينغ مايزيدش فالعرض */
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            color: #4CAF50; /* لون أخضر عصري */
+            margin-bottom: 25px;
+            font-size: 2em;
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1.1em;
+            resize: vertical; /* كيسمح ليك تكبر أو تصغر الـ textarea عموديا */
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        textarea:focus {
+            border-color: #4CAF50;
+        }
+
+        /* ستايل جديد للأزرار */
+        .actions {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center; /* باش يكون الزر فالوسط */
+            gap: 15px; /* مسافة بين الأزرار إذا زدتيهم */
+        }
+
+        .actions button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            color: white; /* لون النص في الزر */
+        }
+
+        #downloadButton {
+            background-color: #007bff; /* لون أزرق للتحميل */
+        }
+
+        #downloadButton:hover {
+            background-color: #0056b3;
+        }
+
+        #clearButton {
+            background-color: #dc3545; /* لون أحمر للمسح */
+        }
+
+        #clearButton:hover {
+            background-color: #c82333;
+        }
+
+        .results {
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            background-color: #e8f5e9; /* خلفية خفيفة للنتائج */
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #2e7d32; /* لون غامق للنتائج */
+        }
+
+        .results p {
+            margin: 0;
+            padding: 0 10px;
+        }
+
+        .word-frequency {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f0f7f0; /* خلفية أفتح للتكرار */
+            border-radius: 8px;
+            text-align: right; /* باش النص يبدا من اليمين */
+        }
+
+        .word-frequency h2 {
+            color: #4CAF50;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+            text-align: center; /* العنوان يكون ف الوسط */
+        }
+
+        .word-frequency ul {
+            list-style: none; /* كيحيد النقط ديال الليست */
+            padding: 0;
+        }
+
+        .word-frequency li {
+            padding: 8px 0;
+            border-bottom: 1px dashed #e0e0e0;
+            display: flex;
+            justify-content: space-between; /* باش الكلمة والتكرار يجيو فجناب */
+            align-items: center;
+            font-size: 1.1em;
+        }
+
+        .word-frequency li:last-child {
+            border-bottom: none; /* كيحيد السطر من آخر عنصر */
+        }
+
+        .word-frequency li span:first-child {
+            font-weight: normal; /* الكلمة عادية */
+            color: #555;
+        }
+
+        .word-frequency li span:last-child {
+            background-color: #a5d6a7; /* لون خفيف لعدد التكرار */
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            color: #2e7d32;
+        }
+
+        /* التجاوب مع التيليفونات الصغيرة */
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+                width: 95%;
+            }
+
+            h1 {
+                font-size: 1.7em;
+            }
+
+            .results {
+                flex-direction: column; /* باش الكلمات والحروف يجو تحت بعضياتهم */
+                align-items: center;
+            }
+
+            .results p {
+                margin-bottom: 10px;
+            }
+
+            .word-frequency h2 {
+                font-size: 1.3em;
+            }
+
+            .word-frequency li {
+                font-size: 1em;
+            }
+            .actions button {
+                width: 100%; /* الزر ياخد عرض كامل فالتليفونات */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>حساب الكلمات والحروف</h1>
+        <textarea id="textArea" placeholder="أدخل النص هنا..."></textarea>
+        
+        <div class="actions">
+            <button id="downloadButton">تحميل الكلمات المكررة (CSV)</button>
+            <button id="clearButton">مسح النص</button>
+        </div>
+
+        <div class="results">
+            <p>الكلمات: <span id="wordCount">0</span></p>
+            <p>الحروف: <span id="charCount">0</span></p>
+        </div>
+
+        <div class="word-frequency">
+            <h2>تكرار الكلمات</h2>
+            <ul id="wordFrequencyList">
+                </ul>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const textArea = document.getElementById('textArea');
+            const wordCountSpan = document.getElementById('wordCount');
+            const charCountSpan = document.getElementById('charCount');
+            const wordFrequencyList = document.getElementById('wordFrequencyList');
+            const downloadButton = document.getElementById('downloadButton');
+            const clearButton = document.getElementById('clearButton');
+
+            let currentFrequencyMap = {}; 
+
+            // دالة تحديث النتائج. هادي اللي كتغير المحتوى ديال الصفحة.
+            function updateCounts() {
+                const text = textArea.value;
+
+                // حساب عدد الحروف (بلا مسافات)
+                const charCount = text.replace(/\s/g, '').length; 
+                charCountSpan.textContent = charCount;
+
+                // حساب عدد الكلمات وتكرارها
+                const cleanedText = text
+                    .toLowerCase()
+                    .replace(/[\u064B-\u0652\u0670\u06D6-\u06ED]/g, '') // إزالة علامات التشكيل العربية
+                    // هذا هو السطر المعدل اللي كيحل المشكل ديال الكلمات صفر وديال الحفاظ على الرموز
+                    .replace(/[^\p{L}\p{N}\s.,!?;:"'()&%$#@*~|{}()!&_`:<>^؟][+-=\/]/gu, ' ') 
+                    .replace(/\s+/g, ' ') 
+                    .trim(); 
+                
+                const words = cleanedText.split(' ').filter(word => word.length > 0);
+                
+                const wordCount = words.length;
+                wordCountSpan.textContent = wordCount;
+
+                const frequencyMap = {};
+                if (words.length > 0) {
+                    words.forEach(word => {
+                        frequencyMap[word] = (frequencyMap[word] || 0) + 1;
+                    });
+                }
+
+                currentFrequencyMap = frequencyMap; 
+
+                // عرض تكرار الكلمات
+                wordFrequencyList.innerHTML = ''; 
+                const sortedWords = Object.keys(frequencyMap).sort((a, b) => frequencyMap[b] - frequencyMap[a]);
+
+                for (let i = 0; i < sortedWords.length; i++) { 
+                    const word = sortedWords[i];
+                    const count = frequencyMap[word];
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `<span>${word}</span> <span>${count}</span>`;
+                    wordFrequencyList.appendChild(listItem);
+                }
+
+                // اذا كانت الـ textArea خاوية، رجع القيم لـ 0 ومسح قائمة التكرار
+                if (text.trim() === '') {
+                    wordCountSpan.textContent = 0;
+                    charCountSpan.textContent = 0;
+                    wordFrequencyList.innerHTML = ''; 
+                    currentFrequencyMap = {}; 
+                }
+            }
+
+            // دالة تحميل ملف CSV. هادي ما فيها حتى شي سطر ديال المسح.
+            function downloadCSV(event) {
+                // مهم جداً: event.preventDefault() باش ما تعاودش الصفحة تحمل
+                event.preventDefault(); 
+
+                if (Object.keys(currentFrequencyMap).length === 0) {
+                    alert('أدخل النص أولاً لحساب الكلمات، أو لا توجد كلمات لتحميلها.');
+                    return;
+                }
+
+                let csvContent = "الكلمة,التكرار\n"; 
+                const sortedWordsForDownload = Object.keys(currentFrequencyMap).sort((a, b) => currentFrequencyMap[b] - currentFrequencyMap[a]);
+
+                sortedWordsForDownload.forEach(word => {
+                    const count = currentFrequencyMap[word];
+                    // إذا كانت الكلمة فيها فاصلة (comma), نغلفها بـ double quotes باش Excel يقراها صحيحة
+                    const escapedWord = word.includes(',') ? `"${word.replace(/"/g, '""')}"` : word;
+                    csvContent += `${escapedWord},${count}\n`;
+                });
+
+                // إنشاء Blob مع BOM (Byte Order Mark) لضمان أن Excel يفتح الملف بترميز UTF-8 بشكل صحيح
+                const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csvContent], { type: 'text/csv;charset=utf-8;' }); 
+                const url = URL.createObjectURL(blob);
+
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'كلمات_مكررة.csv'; 
+                document.body.appendChild(a);
+                a.click(); 
+                document.body.removeChild(a); 
+                URL.revokeObjectURL(url); 
+            }
+
+            // ربط الأحداث
+            textArea.addEventListener('input', updateCounts); 
+            downloadButton.addEventListener('click', downloadCSV); 
+            
+            // إضافة حدث لزر مسح النص
+            clearButton.addEventListener('click', function() {
+                textArea.value = ''; 
+                updateCounts(); 
+            });
+
+            // باش يبدا يحسب من الأول إذا كان النص موجود عند تحميل الصفحة
+            updateCounts();
+        });
+    </script>
+</body>
+</html>
