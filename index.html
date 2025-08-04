@@ -43,7 +43,7 @@
             border: 2px solid #ddd;
             border-radius: 8px;
             font-size: 1.1em;
-                   resize: none; /* كيسمح ليك تكبر أو تصغر الـ textarea عموديا */
+            resize: vertical; /* كيسمح ليك تكبر أو تصغر الـ textarea عموديا */
             margin-bottom: 20px;
             box-sizing: border-box;
             outline: none;
@@ -54,12 +54,13 @@
             border-color: #4CAF50;
         }
 
-        /* ستايل جديد للأزرار */
+        /* ستايل الأزرار */
         .actions {
             margin-bottom: 20px;
             display: flex;
-            justify-content: center; /* باش يكون الزر فالوسط */
-            gap: 15px; /* مسافة بين الأزرار إذا زدتيهم */
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
         }
 
         .actions button {
@@ -69,12 +70,24 @@
             cursor: pointer;
             font-size: 1em;
             font-weight: bold;
-            transition: background-color 0.3s ease;
-            color: white; /* لون النص في الزر */
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            color: white;
+        }
+
+        .actions button:hover {
+            transform: translateY(-2px);
+        }
+
+        #calculateButton {
+            background-color: #28a745;
+        }
+
+        #calculateButton:hover {
+            background-color: #218838;
         }
 
         #downloadButton {
-            background-color: #007bff; /* لون أزرق للتحميل */
+            background-color: #007bff;
         }
 
         #downloadButton:hover {
@@ -82,23 +95,69 @@
         }
 
         #clearButton {
-            background-color: #dc3545; /* لون أحمر للمسح */
+            background-color: #dc3545;
         }
 
         #clearButton:hover {
             background-color: #c82333;
         }
 
+        /* ستايل الـ progress-container الجديد (اللي فيه spinner) */
+        .progress-container {
+            width: 100%;
+            /* حيدنا الخلفية والحدود باش يولي شفاف */
+            background-color: transparent; /* خليناه شفاف */
+            border: none; /* حيدنا الحدود */
+            border-radius: 8px;
+            margin-top:30px;
+            height: 60px; /* صغرنا العلو ديالو */
+            display: none; /* مخفي في البداية */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 10px; /* مسافة بين الـ spinner والنص */
+            box-sizing: border-box;
+        }
+        
+        /* ستايل الـ Spinner الدائري */
+        .spinner {
+            /* زدنا border-width باش يولي غليظ ومقاد */
+            border: 5px solid rgba(0, 0, 0, 0.1); /* اللون الأساسي للحدود (رمادي فاتح شفاف) */
+            border-top: 5px solid #f99a00; /* لون الجزء الأول (برتقالي) */
+            border-right: 5px solid #4285f4; /* لون الجزء الثاني (أزرق) */
+            border-bottom: 5px solid #f99a00; /* لون الجزء الثالث (برتقالي) */
+            border-left: 5px solid #4285f4; /* لون الجزء الرابع (أزرق) */
+            border-radius: 50%; /* باش يولي دائري */
+            width: 40px; /* حجم الـ spinner */
+            height: 40px; /* حجم الـ spinner */
+            animation: spin 1s linear infinite; /* حركة الدوران */
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.05); /* ظل خفيف */
+            flex-shrink: 0; /* باش ما يتكمش */
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ستايل الرسالة داخل الـ progress-container */
+        .progress-message {
+            font-size: 1.2em;
+            color: #555;
+            font-weight: bold;
+        }
+
+
         .results {
             display: flex;
             justify-content: space-around;
             padding: 15px 0;
-            background-color: #e8f5e9; /* خلفية خفيفة للنتائج */
+            background-color: #e8f5e9;
             border-radius: 8px;
             margin-top: 20px;
             font-size: 1.2em;
             font-weight: bold;
-            color: #2e7d32; /* لون غامق للنتائج */
+            color: #2e7d32;
         }
 
         .results p {
@@ -109,20 +168,20 @@
         .word-frequency {
             margin-top: 30px;
             padding: 20px;
-            background-color: #f0f7f0; /* خلفية أفتح للتكرار */
+            background-color: #f0f7f0;
             border-radius: 8px;
-            text-align: right; /* باش النص يبدا من اليمين */
+            text-align: right;
         }
 
         .word-frequency h2 {
             color: #4CAF50;
             margin-bottom: 15px;
             font-size: 1.5em;
-            text-align: center; /* العنوان يكون ف الوسط */
+            text-align: center;
         }
 
         .word-frequency ul {
-            list-style: none; /* كيحيد النقط ديال الليست */
+            list-style: none;
             padding: 0;
         }
 
@@ -130,22 +189,22 @@
             padding: 8px 0;
             border-bottom: 1px dashed #e0e0e0;
             display: flex;
-            justify-content: space-between; /* باش الكلمة والتكرار يجيو فجناب */
+            justify-content: space-between;
             align-items: center;
             font-size: 1.1em;
         }
 
         .word-frequency li:last-child {
-            border-bottom: none; /* كيحيد السطر من آخر عنصر */
+            border-bottom: none;
         }
 
         .word-frequency li span:first-child {
-            font-weight: normal; /* الكلمة عادية */
+            font-weight: normal;
             color: #555;
         }
 
         .word-frequency li span:last-child {
-            background-color: #a5d6a7; /* لون خفيف لعدد التكرار */
+            background-color: #a5d6a7;
             padding: 4px 8px;
             border-radius: 4px;
             font-weight: bold;
@@ -164,7 +223,7 @@
             }
 
             .results {
-                flex-direction: column; /* باش الكلمات والحروف يجو تحت بعضياتهم */
+                flex-direction: column;
                 align-items: center;
             }
 
@@ -180,7 +239,22 @@
                 font-size: 1em;
             }
             .actions button {
-                width: 100%; /* الزر ياخد عرض كامل فالتليفونات */
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            .actions {
+                flex-direction: column;
+            }
+            .progress-container {
+                height: 50px; /* صغر الحجم فالتيليفون */
+            }
+            .spinner {
+                width: 30px;
+                height: 30px;
+                border-width: 4px; /* صغرناه شوية فالتليفون */
+            }
+            .progress-message {
+                font-size: 1em;
             }
         }
     </style>
@@ -191,8 +265,14 @@
         <textarea id="textArea" placeholder="أدخل النص هنا..."></textarea>
         
         <div class="actions">
+            <button id="calculateButton">احسب النص</button>
             <button id="downloadButton">تحميل الكلمات المكررة (CSV)</button>
             <button id="clearButton">مسح النص</button>
+        </div>
+
+        <div class="progress-container" id="progressBarContainer">
+            <div class="spinner"></div>
+            <div class="progress-message">لحظة من فضلك...</div>
         </div>
 
         <div class="results">
@@ -215,62 +295,79 @@
             const wordFrequencyList = document.getElementById('wordFrequencyList');
             const downloadButton = document.getElementById('downloadButton');
             const clearButton = document.getElementById('clearButton');
+            const calculateButton = document.getElementById('calculateButton');
+            
+            const progressBarContainer = document.getElementById('progressBarContainer');
 
             let currentFrequencyMap = {}; 
 
-            // دالة تحديث النتائج. هادي اللي كتغير المحتوى ديال الصفحة.
+            // دالة تحديث النتائج
             function updateCounts() {
                 const text = textArea.value;
 
-                // حساب عدد الحروف (بلا مسافات)
-                const charCount = text.replace(/\s/g, '').length; 
-                charCountSpan.textContent = charCount;
+                // إخفاء النتائج الحالية فور بدء الحساب
+                wordCountSpan.textContent = 0;
+                charCountSpan.textContent = 0;
+                wordFrequencyList.innerHTML = '';
+                currentFrequencyMap = {};
 
-                // حساب عدد الكلمات وتكرارها
-                const cleanedText = text
-                    .toLowerCase()
-                    .replace(/[\u064B-\u0652\u0670-\u06ED]/g, ''); // إزالة علامات التشكيل العربية
-                
-                // التعبير النمطي الجديد: غنطابقو أي مجموعة من الحروف/الأرقام/الرموز اللي بغينا نحتافضو بيها
-                // OR (بواسطة |) أي رمز خاص بوحدو
-                const words = cleanedText.match(/[\p{L}\p{N}]+|[.,!?;:"'()&%$#@*|\-_+=\\\/\]\[{}~`<>^؟éçà]/gu) || [];
-                
-                const wordCount = words.length;
-                wordCountSpan.textContent = wordCount;
+                // إظهار الـ spinner container
+                progressBarContainer.style.display = 'flex'; // كنرجعوها flex باش الـ spinner يجي فالوسط
 
-                const frequencyMap = {};
-                if (words.length > 0) {
-                    words.forEach(word => {
-                        frequencyMap[word] = (frequencyMap[word] || 0) + 1;
-                    });
-                }
+                // تأخير وهمي لـ 3 ثواني قبل إخفاء الـ spinner وعرض النتائج
+                setTimeout(() => {
+                    progressBarContainer.style.display = 'none'; // إخفاء الـ spinner container
 
-                currentFrequencyMap = frequencyMap; 
+                    // **** هنا غنحطو جميع عمليات الحساب وعرض النتائج ****
 
-                // عرض تكرار الكلمات
-                wordFrequencyList.innerHTML = ''; 
-                const sortedWords = Object.keys(frequencyMap).sort((a, b) => frequencyMap[b] - frequencyMap[a]);
+                    // حساب عدد الحروف (بلا مسافات)
+                    const charCount = text.replace(/\s/g, '').length; 
+                    charCountSpan.textContent = charCount;
 
-                for (let i = 0; i < sortedWords.length; i++) { 
-                    const word = sortedWords[i];
-                    const count = frequencyMap[word];
-                    const listItem = document.createElement('li');
-                    listItem.innerHTML = `<span>${word}</span> <span>${count}</span>`;
-                    wordFrequencyList.appendChild(listItem);
-                }
+                    // حساب عدد الكلمات وتكرارها
+                    const cleanedText = text
+                        .toLowerCase()
+                        .replace(/[\u064B-\u0652\u0670-\u06ED]/g, ''); // إزالة علامات التشكيل العربية
+                    
+                    const words = cleanedText.match(/[\p{L}\p{N}]+|[.,!?;:"'()&%$#@*|\-_+=\\\/\]\[{}~`<>^؟éçà]/gu) || [];
+                    
+                    const wordCount = words.length;
+                    wordCountSpan.textContent = wordCount;
 
-                // اذا كانت الـ textArea خاوية، رجع القيم لـ 0 ومسح قائمة التكرار
-                if (text.trim() === '') {
-                    wordCountSpan.textContent = 0;
-                    charCountSpan.textContent = 0;
+                    const frequencyMap = {};
+                    if (words.length > 0) {
+                        words.forEach(word => {
+                            frequencyMap[word] = (frequencyMap[word] || 0) + 1;
+                        });
+                    }
+
+                    currentFrequencyMap = frequencyMap; 
+
+                    // عرض تكرار الكلمات
                     wordFrequencyList.innerHTML = ''; 
-                    currentFrequencyMap = {}; 
-                }
+                    const sortedWords = Object.keys(frequencyMap).sort((a, b) => frequencyMap[b] - frequencyMap[a]);
+
+                    for (let i = 0; i < sortedWords.length; i++) { 
+                        const word = sortedWords[i];
+                        const count = frequencyMap[word];
+                        const listItem = document.createElement('li');
+                        listItem.innerHTML = `<span>${word}</span> <span>${count}</span>`;
+                        wordFrequencyList.appendChild(listItem);
+                    }
+
+                    // اذا كانت الـ textArea خاوية، رجع القيم لـ 0 ومسح قائمة التكرار
+                    if (text.trim() === '') {
+                        wordCountSpan.textContent = 0;
+                        charCountSpan.textContent = 0;
+                        wordFrequencyList.innerHTML = ''; 
+                        currentFrequencyMap = {}; 
+                    }
+
+                }, 3000); // تأخير ظهور النتائج لمدة 3 ثواني
             }
 
-            // دالة تحميل ملف CSV. هادي ما فيها حتى شي سطر ديال المسح.
+            // دالة تحميل ملف CSV.
             function downloadCSV(event) {
-                // مهم جداً: event.preventDefault() باش ما تعاودش الصفحة تحمل
                 event.preventDefault(); 
 
                 if (Object.keys(currentFrequencyMap).length === 0) {
@@ -284,7 +381,6 @@
                 sortedWordsForDownload.forEach(word => {
                     const count = currentFrequencyMap[word];
                     // نغلف الكلمة بعلامتي تنصيص إذا كانت تحتوي على فاصلة، علامة تنصيص، أو أي رمز خاص بـ CSV، أو مسافة
-                    // هاد التعديل باش الرموز تطلع كاملة في Excel
                     const needsQuotes = /[",\s@#$%^&*()_+\|{}\[\]:;/?><~!=-`\\]/.test(word);
                     const escapedWord = needsQuotes ? `"${word.replace(/"/g, '""')}"` : word;
                     csvContent += `${escapedWord},${count}\n`;
@@ -304,19 +400,19 @@
             }
 
             // ربط الأحداث
-            textArea.addEventListener('input', updateCounts); 
+            calculateButton.addEventListener('click', updateCounts); 
             downloadButton.addEventListener('click', downloadCSV); 
             
             // إضافة حدث لزر مسح النص
             clearButton.addEventListener('click', function() {
                 textArea.value = ''; 
-                updateCounts(); 
+                wordCountSpan.textContent = 0;
+                charCountSpan.textContent = 0;
+                wordFrequencyList.innerHTML = ''; 
+                currentFrequencyMap = {}; 
+                progressBarContainer.style.display = 'none'; // تأكد أن الـ spinner مخفي
             });
-
-            // باش يبدا يحسب من الأول إذا كان النص موجود عند تحميل الصفحة
-            updateCounts();
         });
     </script>
 </body>
 </html>
-
